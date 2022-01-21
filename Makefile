@@ -17,6 +17,7 @@ CFLAGS = -Werror -Wall -Wextra
 # CFLAGS = -Werror -Wall -Wextra -g -fsanitize=address
 SRCS = main.c \
 philo_life.c \
+dead.c \
 utils.c
 
 OBJS = $(SRCS:.c=.o)

@@ -25,10 +25,15 @@ typedef struct s_status
 }	t_status;
 
 size_t	ft_strlen(const char *str);
-int	ft_strncmp(const char *s1, const char *s2, size_t n);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 int		custom_atoi(const char *str);
+int		is_over(t_status *s);
 void	*philo_life(void *p);
-void	error(void);
 size_t	get_time(void);
+int		is_over(t_status *s);
+int		launch(t_status *stat, pthread_t *philos);
+int		are_philos_full(t_status *stat);
+int		are_philos_starved(t_status *stat);
+int		is_starved_or_full(t_status *s);
 
 #endif

@@ -1,10 +1,5 @@
 #include "philo.h"
 
-void	error(void)
-{
-	write(1, "error\n", 7);
-}
-
 int	ft_isdigit(int c)
 {
 	if (c >= '0' && c <= '9')

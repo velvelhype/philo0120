@@ -3,15 +3,10 @@
 int	init_count(t_status *stat, int argc, char **argv)
 {
 	stat->is_dead = 0;
-
 	stat->max = custom_atoi(argv[1]);
-	if (stat->max == 0)
-		return (1);
 	stat->number = custom_atoi(argv[1]);
-	if (stat->number == 0)
-		return (1);
 	stat->time_to_die = custom_atoi(argv[2]);
-	if (stat->time_to_die == 0)
+	if (!stat->max || !stat->number || !stat->time_to_die)
 		return (1);
 	stat->last_meal_t = (size_t *)malloc(sizeof(size_t) * stat->max);
 	if (!stat->last_meal_t)
@@ -89,8 +84,10 @@ int	are_philos_starved(t_status *stat)
 	{
 		if (stat->last_meal_t[i] + stat->time_to_die <= now)
 		{
+			pthread_mutex_lock(&stat->talk_mtx);
 			printf("%zu ", get_time());
 			printf("%d died\n", i + 1);
+			pthread_mutex_unlock(&stat->talk_mtx);
 			return (1);
 		}
 		i++;
@@ -102,40 +99,18 @@ int	main(int argc, char **argv)
 {
 	t_status	stat;
 	pthread_t	*philos;
-	int			i;
-	if (argc != 5 && argc != 6)
-	{
-		error();
-		return (0);
-	}
-	if (init_status(&stat, argc, argv))
-	{
-		error();
-		return (0);
-	}
 
+	if ((argc != 5 && argc != 6) || init_status(&stat, argc, argv))
+	{
+		write(1, "error\n", 7);
+		return (0);
+	}
 	philos = (pthread_t *)malloc(sizeof(pthread_t) * stat.max);
 	if (!philos)
-		return (1);
-	i = 0;
-	while (i < stat.max)
-	{
-		if (pthread_create(&philos[i], NULL, &philo_life, &stat))
-		{
-			error();
-			return (0);
-		}
-		pthread_detach(philos[i]);
-		usleep(500);
-		i++;
-	}
+		return (0);
+	if (launch(&stat, philos))
+		return (0);
 	while (1)
-	{
-		if (are_philos_starved(&stat) || are_philos_full(&stat))
-		{
-			stat.is_dead = 1;
-			usleep(500);
+		if (is_starved_or_full(&stat))
 			return (0);
-		}
-	}
 }
