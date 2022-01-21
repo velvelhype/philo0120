@@ -87,7 +87,8 @@ void	*philo_life(void *p)
 	{
 		take_a_fork(stat, code_number);
 		action("sleep", stat, code_number, stat->sleep_time);
-		usleep(500);
+		if (is_over(stat))
+			return (NULL);
 		action("think", stat, code_number, 0);
 	}
 	return (NULL);
