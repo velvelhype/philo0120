@@ -134,7 +134,7 @@ int	main(int argc, char **argv)
 		if (are_philos_starved(&stat) || are_philos_full(&stat))
 		{
 			stat.is_dead = 1;
-			usleep(100);
+			usleep(500);
 			return (0);
 		}
 	}

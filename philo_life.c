@@ -64,7 +64,6 @@ void	take_a_fork(t_status *s, int c)
 			action("eat", s, c, s->eat_time);
 		if (s->is_dead)
 		{
-			usleep(1000);
 			return ;
 		}
 			(s->eat_counts[c])++;
